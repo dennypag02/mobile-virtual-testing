@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennypag02/mobile-virtual-testing/contracts/test-request.schema.json",
+  "title": "Mobile Virtual Testing Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "request_id", "application", "device", "steps", "evidence"],
+  "properties": {
+    "version": {"const": "1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact"],
+      "properties": {
+        "artifact": {"type": "string", "minLength": 1},
+        "package_id": {"type": "string"},
+        "launch_activity": {"type": "string"}
+      }
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform"],
+      "properties": {
+        "platform": {"enum": ["android", "ios", "fake"]},
+        "os_version": {"type": "string"},
+        "model": {"type": "string"},
+        "orientation": {"enum": ["portrait", "landscape"]}
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "action"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "action": {
+            "enum": ["launch", "tap", "text", "swipe", "wait", "screenshot", "terminate"]
+          },
+          "target": {"type": "string"},
+          "value": {"type": ["string", "number"]},
+          "timeout_seconds": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["screenshots", "device_logs"],
+      "properties": {
+        "screenshots": {"type": "boolean"},
+        "video": {"type": "boolean", "default": false},
+        "device_logs": {"type": "boolean"},
+        "app_logs": {"type": "boolean", "default": true}
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_timeout_seconds": {"type": "number", "minimum": 1}
+      }
+    }
+  }
+}
