@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennypag02/mobile-virtual-testing/contracts/evidence-bundle.schema.json",
+  "title": "Mobile Virtual Testing Evidence Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "request_id", "run_id", "status", "provider", "device", "steps", "artifacts"],
+  "properties": {
+    "version": {"const": "1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["passed", "failed", "error"]},
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string"},
+        "host": {"type": "string"}
+      }
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["platform"],
+      "properties": {
+        "platform": {"enum": ["android", "ios", "fake"]},
+        "os_version": {"type": "string"},
+        "model": {"type": "string"},
+        "identifier": {"type": "string"}
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "action", "status"],
+        "properties": {
+          "id": {"type": "string"},
+          "action": {"type": "string"},
+          "status": {"enum": ["passed", "failed", "error"]},
+          "message": {"type": "string"},
+          "started_at": {"type": "string"},
+          "finished_at": {"type": "string"}
+        }
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "passed"],
+        "properties": {
+          "id": {"type": "string"},
+          "passed": {"type": "boolean"},
+          "message": {"type": "string"}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": {"enum": ["screenshot", "video", "device_log", "app_log", "report"]},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string"}
+        }
+      }
+    },
+    "started_at": {"type": "string"},
+    "finished_at": {"type": "string"},
+    "error": {"type": "string"}
+  }
+}
